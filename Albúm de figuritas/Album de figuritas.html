@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly Demo: Generating JavaScript</title>
+  <script src="scripts/blockly_compressed.js"></script>
+  <script src="scripts/blocks_compressed.js"></script>
+  <script src="scripts/javascript_compressed.js"></script>
+  <script src="scripts/msg/js/en.js"></script>
+
+  <script src="scripts/codigoFiguritas.js"></script>
+  <script src="scripts/definicionesFiguritas.js"></script>
+  
+  
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+  </style>
+</head>
+<body>
+  <p>
+    <button onclick="runCode()">Ejecutar Código</button>
+  </p>
+
+  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="Primitivas" colour="#5b67a5">
+      <block type="nuevo_alb_m"></block>
+      <block type="contar_figurita"></block>
+      <block type="comprar_figurita"></block>
+      <block type="pegar_figurita"></block>
+    </category>
+    <category name="Repeticiones" colour="#a55b80">
+      <block type="mientras"></block>
+    </category>
+    <category name="Sensores" colour="#5ba55b">
+      <block type="faltan_figuritas"></block>
+    </category>
+  </xml> 
+
+  <script>
+    var demoWorkspace = Blockly.inject('blocklyDiv',
+        {media: '../../media/',
+         toolbox: document.getElementById('toolbox')});
+    Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
+                               demoWorkspace);
+
+    function showCode() {
+      // Generate JavaScript code and display it.
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      var code = Blockly.JavaScript.workspaceToCode(demoWorkspace);
+      alert(code);
+    }
+
+    function runCode() {
+      // Generate JavaScript code and run it.
+      window.LoopTrap = 1000;
+      Blockly.JavaScript.INFINITE_LOOP_TRAP =
+          'if (--window.LoopTrap === 0) throw "Infinite loop.";\n';
+      var code = Blockly.JavaScript.workspaceToCode(demoWorkspace);
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      var almbum;
+      var cantFiguritasCompradas;
+      var nuevaFigurita;
+      try {
+        eval(code);
+      } catch (e) {
+        alert(e);
+      }
+    }
+  </script>
+
+</body>
+</html>
